@@ -1,0 +1,173 @@
+﻿@page  "/fault/edit/{faultId:int}"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+@inject IJSRuntime js
+@using System.Net.Http
+@using System.Text.Json
+<h3>FaultFixed</h3>
+
+
+<EditForm Model="@fault" OnValidSubmit="@EditFault">
+    <DataAnnotationsValidator />
+    <div>
+
+        <div>
+            <div>
+                <div rows="5">
+                    <label>Bölüm : </label>
+                </div>
+                <div float="left">
+                    <select value="@fault.MakinaGrubu" @onchange="@DoStuff">
+                        <option value="">Lütfen Seçiniz</option>
+                        @foreach (var item in machineList.Keys)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                    <ValidationMessage For="@(() => fault.MakinaGrubu)" />
+                </div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <div rows="5">
+                    <label>Makina : </label>
+                </div>
+                <div float="left">
+                    <InputSelect @bind-Value="@fault.Makina">
+                        <option value="">Lütfen Seçiniz</option>
+                        @foreach (var item in makina)
+                        {
+
+                            <option value="@item">@item</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => fault.Makina)" />
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <div rows="5">
+                    <label>Operatör : </label>
+                </div>
+                <div float="left">
+                    <InputText @bind-Value="@fault.Operator">
+                        <option value="Makine1">Operatör</option>
+                    </InputText>
+                    <ValidationMessage For="@(() => fault.Operator)" />
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div rows="5">
+                <label>Açıklama :</label>
+
+            </div>
+            <div float="left">
+                <InputTextArea @bind-Value="@fault.Description" rows="7" cols="33" />
+                <ValidationMessage For="@(() => fault.Description)" />
+
+            </div>
+        </div>
+
+
+        @*<button type="submit" class="btn btn-success" @onclick="(() => CreateFault())">
+                Kaydet
+            </button>*@
+    </div>
+
+    <div>
+
+        <div>
+            <div>
+                <label>Kullanıcı Adı</label>
+            </div>
+            <InputText @bind-Value="@fault.FixBy">
+                @*<option value="">Lütfen Adınızı Giriniz...</option>*@
+            </InputText>
+        </div>
+        <div>
+            <div>
+                <label>Yapılan İşlemler</label>
+            </div>
+            <InputTextArea @bind-Value="@fault.FixDescription" rows="7" cols="42" />
+            @*<option value="">Lütfen Açıklama Giriniz...</option>*@
+        </div>
+        <div>
+            <div>
+                <label>Tarih</label>
+
+            </div>
+
+            <InputDate @bind-Value="@fault.FixedTime">
+            </InputDate>
+
+        </div>
+        <hr />
+        <button type="submit" class="btn btn-success" @onclick="(() => EditFault())">
+            Kaydet
+        </button>
+    </div>
+
+
+
+</EditForm>
+
+
+
+@code {
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+
+    [Parameter] public FaultApp2.Shared.Models.Fault fault { get; set; } = new FaultApp2.Shared.Models.Fault();
+
+    [Parameter] public int faultId { get; set; }
+
+
+    List<FaultApp2.Shared.Models.Fault> faultList { get; set; }
+
+
+    protected async override Task OnParametersSetAsync()
+    {
+        faultList = await http.GetFromJsonAsync<List<FaultApp2.Shared.Models.Fault>>($"api/fault/edit/{faultId}");
+
+
+    }
+
+
+    async Task EditFault()
+    {
+
+        await http.PutAsJsonAsync("api/fault", fault);
+        await js.InvokeVoidAsync("alert", $"Updated Successfully!");
+        //uriHelper.NavigateTo("fault");
+
+    }
+
+
+
+    Dictionary<String, List<String>> machineList { get; set; } =
+  new Dictionary<String, List<String>>()
+  {
+            { "EFEKT",  new List<string>() { "EFEKT-1", "EFEKT-2", "EFEKT-3", "EFEKT-4" } },
+             { "RAM",  new List<string>() { "RAM-1", "RAM-2", "RAM-3", "RAM-4" } }
+          };
+
+    public List<String> makina { get; set; } = new List<String>() { "Liste Yüklenemedi" };
+
+    public void DoStuff(ChangeEventArgs e)
+    {
+        var kafamdakiMakina = e.Value.ToString();
+        fault.MakinaGrubu = kafamdakiMakina;
+        // Console.WriteLine("It is definitely: " + kafamdakiMakina);
+        makina = machineList.ContainsKey(kafamdakiMakina) ? machineList[kafamdakiMakina] : new List<String>() { "Liste Yüklenemedi" };
+
+    }
+
+
+
+}
+
