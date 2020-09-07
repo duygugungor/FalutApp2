@@ -4,177 +4,202 @@
 @inject NavigationManager uriHelper
 @inject IJSRuntime js
 
-<h3>Arıza Kayıt Formu</h3>
-@*<Alert @ref="myAlert" Color="Color.Success">
-    <AlertMessage>Well done!</AlertMessage>
-    <AlertDescription>You successfully read this important alert message.</AlertDescription>
-</Alert>*@
-<EditForm Model="@fault">
-    <DataAnnotationsValidator />
-    <div class="container">
-        <div class="row  justify-content-md-center">
-            <div class="col">
-                <div>
-                    <div>
-                        <div>
-                            <label>Bölüm : </label>
+    <AuthorizeView>
+        <Authorized>
+            <h3>Arıza Kayıt Formu</h3>
+            @*<Alert @ref="myAlert" Color="Color.Success">
+            <AlertMessage>Well done!</AlertMessage>
+            <AlertDescription>You successfully read this important alert message.</AlertDescription>
+        </Alert>*@
+            <EditForm Model="@fault" Context="editForm">
+                <DataAnnotationsValidator />
+                <div class="container">
+                    <div class="row  justify-content-md-center">
+                        <div class="col">
+                            <div>
+                                <div>
+                                    <div>
+                                        <label>Bölüm : </label>
+                                    </div>
+                                    <div>
+                                        @*<Blazorise.Select TValue="string" @bind-SelectedValue="@fault.MakinaGrubu">
+                                        <SelectItem Value="@fault.MakinaGrubu"></SelectItem>
+                                    </Blazorise.Select>*@
+                                        <select class="browser-default custom-select" @bind="@SelectedMakinaGrubu">
+                                            <option value="">Lütfen Seçiniz</option>
+
+                                            {@if(makinaGrubus != null && makinaGrubus.Count>0) { 
+                                            @foreach (var item in makinaGrubus)
+                                            {
+                                                <option value="@item">@item.Name</option>
+                                            }}
+                                        </select>
+                                        <ValidationMessage For="@(() => fault.MakinaGrubu)" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <label>Makina : </label>
+                                    </div>
+                                    <div>
+                                        <select class="browser-default custom-select" @bind="@fault.Makina">
+                                            <option value="">Lütfen Seçiniz</option>
+                                            @if(makinas != null && makinas.Count>0)
+                                            {
+
+                                            @foreach (var item in makinas)
+                                            {
+
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                            }
+                                        </select>
+                                        <ValidationMessage For="@(() => fault.Makina)" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <label>Operatör : </label>
+                                    </div>
+                                    <div>
+                                        <input type="text" class="form-control" value="@fault.Operator.NameSurname" />
+                                        @*<option value="Makine1">Operatör</option>*@
+
+                                        <ValidationMessage For="@(() => fault.Operator)" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <label>Açıklama :</label>
+
+                                    </div>
+                                    <div>
+                                        <textarea value="@fault.Description" class="form-control" rows="7" cols="33" />
+                                        <ValidationMessage For="@(() => fault.Description)" />
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            @*<Blazorise.Select TValue="string" @bind-SelectedValue="@fault.MakinaGrubu">
-                                    <SelectItem Value="@fault.MakinaGrubu"></SelectItem>
-                                </Blazorise.Select>*@
-                            <select class="browser-default custom-select" value="@fault.MakinaGrubu" @onchange="@DoStuff">
-                                <option value="">Lütfen Seçiniz</option>
-                                @foreach (var item in machineList.Keys)
-                                {
-                                    <option value="@item">@item</option>
-                                }
-                            </select>
-                            <ValidationMessage For="@(() => fault.MakinaGrubu)" />
+                        <div class="col">
+                            <div>
+                                <div>
+                                    <div>
+
+                                        <label>Arıza Başlama Tarih/Saat</label>
+                                    </div>
+
+                                    @*<input type="datetime-local" value="dateTime1" />*@
+                                    <DateEdit Disabled="false" Date="@fault.CreatedTime" />
+                                    <div class="md-form md-outline">
+                                        <input type="time" id="default-picker" class="form-control" value="dateTime1">
+                                        @*<label for="default-picker">Default Time Picker</label>*@
+                                    </div>
+                                    @*<TimeEdit TValue="DateTime?" Disabled="false"  Time="@dateTime3" />*@
+                                </div>
+                                <div>
+                                    <div>
+
+                                        <label>Arıza Bildirim Tarihi</label>
+                                    </div>
+                                    <DateEdit Disabled="true" Date="@fault.RecordTime" />
+                                    @*<DateEdit TValue="DateTime?" Date="@dateTime2" DateChanged="@OnDateChanged" />*@
+                                    @*<input type="datetime-local" value="dateTime2" />*@
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <div>
-                            <label>Makina : </label>
+                    <br />
+                    <div class="row">
+                        <div class="col">
+                            <button type="reset" class="btn btn-warning" @onclick="(() => CancelFault())">
+                                Vazgeç
+                            </button>
                         </div>
-                        <div>
-                            <select class="browser-default custom-select" @bind="@fault.Makina">
-                                <option value="">Lütfen Seçiniz</option>
-                                @foreach (var item in makina)
-                                {
+                        <div class="col-4">
+                        </div>
 
-                                    <option value="@item">@item</option>
-                                }
-                            </select>
-                            <ValidationMessage For="@(() => fault.Makina)" />
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <label>Operatör : </label>
-                        </div>
-                        <div>
-                            <input type="text" class="form-control" @bind="@fault.Operator"/>
-                            @*<option value="Makine1">Operatör</option>*@
+                        <div class="col">
+                            <button type="submit" class="btn btn-success" @onclick="(() => CreateFault())">
 
-                            <ValidationMessage For="@(() => fault.Operator)" />
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <label>Açıklama :</label>
-
-                        </div>
-                        <div>
-                            <textarea value="@fault.Description" class="form-control" rows="7" cols="33" />
-                            <ValidationMessage For="@(() => fault.Description)" />
-
+                                Kaydet
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col">
-                <div>
-                    <div>
-                        <div>
-
-                            <label>Arıza Başlama Tarih/Saat</label>
-                        </div>
-
-                        @*<input type="datetime-local" value="dateTime1" />*@
-                        <DateEdit Disabled="false" Date="@fault.CreatedTime" />
-                        <div class="md-form md-outline">
-                            <input type="time" id="default-picker" class="form-control" value="dateTime1">
-                            @*<label for="default-picker">Default Time Picker</label>*@
-                        </div>
-                        @*<TimeEdit TValue="DateTime?" Disabled="false"  Time="@dateTime3" />*@
-                    </div>
-                    <div>
-                        <div>
-
-                            <label>Arıza Bildirim Tarihi</label>
-                        </div>
-                        <DateEdit Disabled="true" Date="@fault.RecordTime" />
-                        @*<DateEdit TValue="DateTime?" Date="@dateTime2" DateChanged="@OnDateChanged" />*@
-                        @*<input type="datetime-local" value="dateTime2" />*@
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col">
-                <button type="reset" class="btn btn-warning" @onclick="(() => CancelFault())">
-                    Vazgeç
-                </button>
-            </div>
-            <div class="col-4">
-            </div>
-
-            <div class="col">
-                <button type="submit" class="btn btn-success" @onclick="(() => CreateFault())">
-
-                    Kaydet
-                </button>
-            </div>
-        </div>
-    </div>
 
 
 
 
-</EditForm>
+            </EditForm>
+        </Authorized>
+        <Authorizing>
+            <h1>Loading ...</h1>
+        </Authorizing>
+    </AuthorizeView>
 
 
-@code {
+    @code {
 
-    // DateTime? selectedDate = DateTime.Now;
+        // DateTime? selectedDate = DateTime.Now;
 
-    //void OnDateChanged(DateTime? date)
-    //{
-    //    dateTime2 = date;
-    //}
+        //void OnDateChanged(DateTime? date)
+        //{
+        //    dateTime2 = date;
+        //}
+
+        Operator opt = new Operator();
+
+        List<FaultApp2.Shared.Models.MakinaGrubu> makinaGrubus { get; set; }
+        FaultApp2.Shared.Models.MakinaGrubu SelectedMakinaGrubu { get; set; }
+        List<FaultApp2.Shared.Models.Makina> makinas { get; set; }
 
 
-    public DateTime dateTime1 = DateTime.Now;
-    public DateTime dateTime2 = DateTime.Now;
-    //public DateTime? dateTime3 = DateTime.Now;
-
-   
-    [Parameter] public FaultApp2.Shared.Models.Fault fault { get; set; } = new FaultApp2.Shared.Models.Fault();
-    async Task CreateFault()
-    {
-        fault.RecordTime = dateTime2;
-        fault.CreatedTime = dateTime1;
-        //fault.CreatedTime = dateTime3.Value;
-        await client.PostAsJsonAsync("api/fault", fault);
-   
-        uriHelper.NavigateTo("fault");
-
-    }
-
-    Dictionary<String, List<String>> machineList { get; set; } =
-        new Dictionary<String, List<String>>()
+        protected override async Task OnInitializedAsync()
         {
+            makinaGrubus = await client.GetFromJsonAsync<List<FaultApp2.Shared.Models.MakinaGrubu>>("api/makinagrubu");
+            makinas = await client.GetFromJsonAsync<List<FaultApp2.Shared.Models.Makina>>("api/Makina");
+        }
+
+        public DateTime dateTime1 = DateTime.Now;
+        public DateTime dateTime2 = DateTime.Now;
+        //public DateTime? dateTime3 = DateTime.Now;
+
+
+        [Parameter] public FaultApp2.Shared.Models.Fault fault { get; set; } = new FaultApp2.Shared.Models.Fault();
+        async Task CreateFault()
+        {
+            fault.RecordTime = dateTime2;
+            fault.CreatedTime = dateTime1;
+            //fault.CreatedTime = dateTime3.Value;
+            await client.PostAsJsonAsync("api/fault", fault);
+
+            uriHelper.NavigateTo("fault");
+
+        }
+
+        Dictionary<String, List<String>> machineList { get; set; } =
+            new Dictionary<String, List<String>>()
+            {
             { "EFEKT",  new List<string>() { "EFEKT-1", "EFEKT-2", "EFEKT-3", "EFEKT-4" } },
              { "RAM",  new List<string>() { "RAM-1", "RAM-2", "RAM-3", "RAM-4" } }
-        };
+    };
 
-    public List<String> makina { get; set; } = new List<String>() { "Liste Yüklenemedi" };
+        public List<String> makina { get; set; } = new List<String>() { "Liste Yüklenemedi" };
 
-    public void DoStuff(ChangeEventArgs e)
-    {
-        var kafamdakiMakina = e.Value.ToString();
-        fault.MakinaGrubu = kafamdakiMakina;
-        Console.WriteLine("It is definitely: " + kafamdakiMakina);
-        makina = machineList.ContainsKey(kafamdakiMakina) ? machineList[kafamdakiMakina] : new List<String>() { "Liste Yüklenemedi" };
-        Console.WriteLine("It is definitely: " + makina);
+        public void DoStuff(ChangeEventArgs e)
+        {
+            var kafamdakiMakina = e.Value.ToString();
+            fault.MakinaGrubu = new MakinaGrubu();
+            Console.WriteLine("It is definitely: " + kafamdakiMakina);
+            makina = machineList.ContainsKey(kafamdakiMakina) ? machineList[kafamdakiMakina] : new List<String>() { "Liste Yüklenemedi" };
+            Console.WriteLine("It is definitely: " + makina);
 
+        }
+        public void CancelFault()
+        {
+
+            uriHelper.NavigateTo("fault");
+
+        }
     }
-    public void CancelFault()
-    {
-
-        uriHelper.NavigateTo("fault");
-
-    }
-}

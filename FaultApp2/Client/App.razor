@@ -1,10 +1,40 @@
-<Router AppAssembly="@typeof(Program).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-    </Found>
-    <NotFound>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p>Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
+@using FaultApp2.Client.Pages.Authentication
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        </Found>
+        <NotFound>
+            <CascadingAuthenticationState>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <p>Sorry, there's nothing at this address.</p>
+                </LayoutView>
+            </CascadingAuthenticationState>
+        </NotFound>
+
+
+    </Router>
+</CascadingAuthenticationState>
+
+@*<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <AuthorizeView>
+                <Authorized>
+                    <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+                </Authorized>
+                <NotAuthorized>
+                    <CascadingAuthenticationState>
+                        <RedirectToLogin />
+                    </CascadingAuthenticationState>
+                </NotAuthorized>
+            </AuthorizeView>
+        </Found>
+        <NotFound>
+            <CascadingAuthenticationState>
+
+                <p>No Found</p>
+            </CascadingAuthenticationState>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>*@

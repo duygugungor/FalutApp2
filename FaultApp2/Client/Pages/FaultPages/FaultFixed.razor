@@ -53,10 +53,10 @@
                     <label>Operatör : </label>
                 </div>
                 <div float="left">
-                    <InputText @bind-Value="@fault.Operator">
+                    <InputText @bind-Value="@fault.Operator.NameSurname">
                         <option value="Makine1">Operatör</option>
                     </InputText>
-                    <ValidationMessage For="@(() => fault.Operator)" />
+                    <ValidationMessage For="@(() => fault.Operator.NameSurname)" />
                 </div>
             </div>
         </div>
@@ -85,7 +85,7 @@
             <div>
                 <label>Kullanıcı Adı</label>
             </div>
-            <InputText @bind-Value="@fault.FixBy">
+            <InputText @bind-Value="@fault.FixBy.NameSurname">
                 @*<option value="">Lütfen Adınızı Giriniz...</option>*@
             </InputText>
         </div>
@@ -161,7 +161,7 @@
     public void DoStuff(ChangeEventArgs e)
     {
         var kafamdakiMakina = e.Value.ToString();
-        fault.MakinaGrubu = kafamdakiMakina;
+        fault.MakinaGrubu = new MakinaGrubu();
         // Console.WriteLine("It is definitely: " + kafamdakiMakina);
         makina = machineList.ContainsKey(kafamdakiMakina) ? machineList[kafamdakiMakina] : new List<String>() { "Liste Yüklenemedi" };
 

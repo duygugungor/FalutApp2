@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaultApp2.Server", "FaultApp2\Server\FaultApp2.Server.csproj", "{2D1BF5A8-6544-431D-BADC-C9C66B796185}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FaultApp2.Server", "FaultApp2\Server\FaultApp2.Server.csproj", "{2D1BF5A8-6544-431D-BADC-C9C66B796185}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaultApp2.Client", "FaultApp2\Client\FaultApp2.Client.csproj", "{2FA1CF63-A255-4386-888D-6D6E26ED6266}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FaultApp2.Client", "FaultApp2\Client\FaultApp2.Client.csproj", "{2FA1CF63-A255-4386-888D-6D6E26ED6266}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaultApp2.Shared", "FaultApp2\Shared\FaultApp2.Shared.csproj", "{73E95AD9-6A50-4320-82A8-EE4890AB35E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FaultApp2.Shared", "FaultApp2\Shared\FaultApp2.Shared.csproj", "{73E95AD9-6A50-4320-82A8-EE4890AB35E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

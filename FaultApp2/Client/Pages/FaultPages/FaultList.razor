@@ -98,19 +98,19 @@ else
 
 
                                 <label>Bölüm : </label>
-                                <TextEdit Disabled="true" Text="@faultToEdit.MakinaGrubu" />
+                                <TextEdit Disabled="true" Text="@faultToEdit.MakinaGrubu.Name" />
 
 
 
                                 <label>Makina : </label>
-                                <TextEdit Disabled="true" Text="@faultToEdit.Makina" />
+                                <TextEdit Disabled="true" Text="@faultToEdit.Makina.Name" />
 
 
 
 
                                 <label>Operatör : </label>
 
-                                <TextEdit Disabled="true" Text="@faultToEdit.Operator" />
+                                <TextEdit Disabled="true" Text="@faultToEdit.Operator.NameSurname" />
 
 
                                 <label>Açıklama :</label>
@@ -132,7 +132,7 @@ else
                                             <label>Kullanıcı Adı</label>
                                         </div>
 
-                                        <InputText @bind-Value="@faultToEdit.FixBy">
+                                        <InputText @bind-Value="@faultToEdit.FixBy.NameSurname">
                                             @*<option value="">Lütfen Adınızı Giriniz...</option>*@
                                         </InputText>
                                     </div>
@@ -195,19 +195,19 @@ else
 
 
                                 <label>Bölüm : </label>
-                                <TextEdit Disabled="true" Text="@faultToEdit.MakinaGrubu" />
+                                <TextEdit Disabled="true" Text="@faultToEdit.MakinaGrubu.Name" />
 
 
 
                                 <label>Makina : </label>
-                                <TextEdit Disabled="true" Text="@faultToEdit.Makina" />
+                                <TextEdit Disabled="true" Text="@faultToEdit.Makina.Name" />
 
 
 
 
                                 <label>Operatör : </label>
 
-                                <TextEdit Disabled="true" Text="@faultToEdit.Operator" />
+                                <TextEdit Disabled="true" Text="@faultToEdit.Operator.NameSurname" />
 
 
                                 <label>Açıklama :</label>
@@ -229,7 +229,7 @@ else
                                             <label>Kullanıcı Adı</label>
                                         </div>
 
-                                        <InputText @bind-Value="@faultToEdit.FixBy">
+                                        <InputText @bind-Value="@faultToEdit.FixBy.NameSurname">
                                             @*<option value="">Lütfen Adınızı Giriniz...</option>*@
                                         </InputText>
                                     </div>

@@ -8,6 +8,9 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using FaultApp2.Server.Data;
 using Microsoft.EntityFrameworkCore;
+using FaultApp2.Server.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace FaultApp2.Server
 {
@@ -24,10 +27,20 @@ namespace FaultApp2.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = false;
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
+            });
+            services.AddControllers().AddNewtonsoftJson();
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +63,8 @@ namespace FaultApp2.Server
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();

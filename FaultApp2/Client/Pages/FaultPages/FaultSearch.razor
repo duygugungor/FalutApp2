@@ -154,7 +154,7 @@ new Dictionary<String, List<String>>()
     public void DoStuff(ChangeEventArgs e)
     {
         var kafamdakiMakina = e.Value.ToString();
-        fault.MakinaGrubu = kafamdakiMakina;
+        fault.MakinaGrubu = new MakinaGrubu();
         // Console.WriteLine("It is definitely: " + kafamdakiMakina);
         makina = machineList.ContainsKey(kafamdakiMakina) ? machineList[kafamdakiMakina] : new List<String>() { "Liste Yüklenemedi" };
 
