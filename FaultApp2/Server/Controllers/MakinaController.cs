@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FaultApp2.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/m/[controller]")]
     [ApiController]
     public class MakinaController : ControllerBase
     {
@@ -22,10 +22,11 @@ namespace FaultApp2.Server.Controllers
 
             _context = context;
         }
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var faults = await _context.Makinas.ToListAsync();
+            var faults = await _context.MakinaSet.ToListAsync();
             return Ok(faults);
         }
 
@@ -35,10 +36,15 @@ namespace FaultApp2.Server.Controllers
             var opt = await GetMakinas().FirstOrDefaultAsync(p => p.Id == id);
             return Ok(opt);
         }
-
-        private DbSet<MakinaGrubu> GetMakinas()
+        [HttpGet("byGroup/{makinaGrubuId}")]
+        public async Task<IActionResult> GetByMakinaGrubu(int makinaGrubuId)
         {
-            return _context.MakinaGrubus;
+            return Ok(await GetMakinas().Where(p => p.MakinaGrubu.Id == makinaGrubuId).ToListAsync());
+        }
+
+        private DbSet<Makina> GetMakinas()
+        {
+            return _context.MakinaSet;
         }
 
     }

@@ -7,6 +7,7 @@ using FaultApp2.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FaultApp2.Server.Controllers
@@ -26,8 +27,7 @@ namespace FaultApp2.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var faults = await _context.MakinaGrubus.ToListAsync();
-            return Ok(faults);
+            return Ok(await _context.MakinaGrubus.ToListAsync());
         }
 
         [HttpGet("{id}")]

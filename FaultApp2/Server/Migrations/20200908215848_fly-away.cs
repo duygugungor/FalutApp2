@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FaultApp2.Server.Migrations
 {
-    public partial class init : Migration
+    public partial class flyaway : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,7 +47,7 @@ namespace FaultApp2.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MakinaGrubu",
+                name: "MakinaGrubus",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -56,7 +56,7 @@ namespace FaultApp2.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MakinaGrubu", x => x.Id);
+                    table.PrimaryKey("PK_MakinaGrubus", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -179,7 +179,7 @@ namespace FaultApp2.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Makina",
+                name: "MakinaSet",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -189,11 +189,11 @@ namespace FaultApp2.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Makina", x => x.Id);
+                    table.PrimaryKey("PK_MakinaSet", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Makina_MakinaGrubu_MakinaGrubuId",
+                        name: "FK_MakinaSet_MakinaGrubus_MakinaGrubuId",
                         column: x => x.MakinaGrubuId,
-                        principalTable: "MakinaGrubu",
+                        principalTable: "MakinaGrubus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -225,15 +225,15 @@ namespace FaultApp2.Server.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Faults_MakinaGrubu_MakinaGrubuId",
+                        name: "FK_Faults_MakinaGrubus_MakinaGrubuId",
                         column: x => x.MakinaGrubuId,
-                        principalTable: "MakinaGrubu",
+                        principalTable: "MakinaGrubus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Faults_Makina_MakinaId",
+                        name: "FK_Faults_MakinaSet_MakinaId",
                         column: x => x.MakinaId,
-                        principalTable: "Makina",
+                        principalTable: "MakinaSet",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -304,8 +304,8 @@ namespace FaultApp2.Server.Migrations
                 column: "OperatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Makina_MakinaGrubuId",
-                table: "Makina",
+                name: "IX_MakinaSet_MakinaGrubuId",
+                table: "MakinaSet",
                 column: "MakinaGrubuId");
         }
 
@@ -339,10 +339,10 @@ namespace FaultApp2.Server.Migrations
                 name: "Operators");
 
             migrationBuilder.DropTable(
-                name: "Makina");
+                name: "MakinaSet");
 
             migrationBuilder.DropTable(
-                name: "MakinaGrubu");
+                name: "MakinaGrubus");
         }
     }
 }

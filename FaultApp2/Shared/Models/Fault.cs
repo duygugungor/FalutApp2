@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace FaultApp2.Shared.Models
@@ -9,9 +11,9 @@ namespace FaultApp2.Shared.Models
         [Required()]
         public int Id { get; set; }
         [Required()]
-        public MakinaGrubu MakinaGrubu { get; set; }
-        public Makina Makina { get; set; }
-        public Operator Operator { get; set; }
+        public MakinaGrubu MakinaGrubu { get; set; } = new MakinaGrubu();
+        public Makina Makina { get; set; } = new Makina();
+        public Operator Operator { get; set; } = new Operator();
         [Required()]
         public DateTime RecordTime { get; set; } = DateTime.Now;
         public string Description { get; set; }
@@ -19,13 +21,17 @@ namespace FaultApp2.Shared.Models
         public DateTime CreatedTime { get; set; } = DateTime.Now;
         public DateTime FixedTime { get; set; } = DateTime.Now;
         public string FixDescription { get; set; }
-        public Operator FixBy { get; set; }
+        public Operator FixBy { get; set; } = new Operator();
         public FaultStatus Status { get; set; } = FaultStatus.REPORTED;
 
     }
-
+   // [TypeConverter(typeof(Makina))]
     public class Makina
     {
+        public Makina()
+        {
+        }
+
         [Required()]
 
         public int Id { get; set; }
@@ -34,9 +40,21 @@ namespace FaultApp2.Shared.Models
         [Required()]
         public MakinaGrubu MakinaGrubu { get; set; }
     }
-
+   
+  //  [TypeConverter(typeof(MakinaGrubu))]
     public class MakinaGrubu
     {
+        public MakinaGrubu()
+        {
+        }
+
+        //public MakinaGrubu(int ıd, string name)
+        //{
+        //    Id = ıd;
+        //    Name = name;
+        //    //Makina = new List<Makina>();
+        //}
+
         [Required()]
 
         public int Id { get; set; }

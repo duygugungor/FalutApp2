@@ -152,7 +152,7 @@ namespace FaultApp2.Server.Migrations
 
                     b.HasIndex("MakinaGrubuId");
 
-                    b.ToTable("Makina");
+                    b.ToTable("MakinaSet");
                 });
 
             modelBuilder.Entity("FaultApp2.Shared.Models.MakinaGrubu", b =>
@@ -168,7 +168,7 @@ namespace FaultApp2.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MakinaGrubu");
+                    b.ToTable("MakinaGrubus");
                 });
 
             modelBuilder.Entity("FaultApp2.Shared.Models.Operator", b =>

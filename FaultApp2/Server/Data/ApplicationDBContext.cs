@@ -21,7 +21,7 @@ namespace FaultApp2.Server.Data
 
         public DbSet<MakinaGrubu> MakinaGrubus { get; set; }
 
-        public DbSet<MakinaGrubu> Makinas { get; set; }
+        public DbSet<Makina> MakinaSet { get; set; }
 
 
 

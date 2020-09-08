@@ -4,6 +4,7 @@
 @inject NavigationManager uriHelper
 @inject IJSRuntime js
 
+
     <AuthorizeView>
         <Authorized>
             <h3>Arıza Kayıt Formu</h3>
@@ -12,7 +13,7 @@
             <AlertDescription>You successfully read this important alert message.</AlertDescription>
         </Alert>*@
             <EditForm Model="@fault" Context="editForm">
-                <DataAnnotationsValidator />
+               @*<DataAnnotationsValidator />*@
                 <div class="container">
                     <div class="row  justify-content-md-center">
                         <div class="col">
@@ -22,19 +23,21 @@
                                         <label>Bölüm : </label>
                                     </div>
                                     <div>
-                                        @*<Blazorise.Select TValue="string" @bind-SelectedValue="@fault.MakinaGrubu">
-                                        <SelectItem Value="@fault.MakinaGrubu"></SelectItem>
-                                    </Blazorise.Select>*@
-                                        <select class="browser-default custom-select" @bind="@SelectedMakinaGrubu">
-                                            <option value="">Lütfen Seçiniz</option>
+                                        @if (makinaGrubus == null)
+                                        {
+                                            <select class="custom-select" disabled>
+                                                <option>(Yükleniyor...)</option>
+                                            </select> }
 
-                                            {@if(makinaGrubus != null && makinaGrubus.Count>0) { 
-                                            @foreach (var item in makinaGrubus)
-                                            {
-                                                <option value="@item">@item.Name</option>
-                                            }}
-                                        </select>
-                                        <ValidationMessage For="@(() => fault.MakinaGrubu)" />
+                                        else
+                                        {
+                                            <select class="custom-select" @onchange="MakinaGrubuSelected">
+                                                <option value="-1" disabled selected>Lütfen Seçiniz</option>
+                                                @for (var i = 0; i < makinaGrubus.Count; i++)
+                                                {
+                                                    <option value="@i">@makinaGrubus[i].Name</option>
+}
+                                            </select>}
                                     </div>
                                 </div>
                                 <div>
@@ -42,19 +45,21 @@
                                         <label>Makina : </label>
                                     </div>
                                     <div>
-                                        <select class="browser-default custom-select" @bind="@fault.Makina">
-                                            <option value="">Lütfen Seçiniz</option>
-                                            @if(makinas != null && makinas.Count>0)
-                                            {
+                                        @if (makinas == null)
+                                        {
+                                            <select class="custom-select" disabled>
+                                                <option>(Yükleniyor...)</option>
+                                            </select> }
 
-                                            @foreach (var item in makinas)
-                                            {
-
-                                                <option value="@item.Id">@item.Name</option>
-                                            }
-                                            }
-                                        </select>
-                                        <ValidationMessage For="@(() => fault.Makina)" />
+                                        else
+                                        {
+                                            <select class="custom-select" @onchange="MakinaSelected">
+                                                <option value="-1" disabled selected>Lütfen Seçiniz</option>
+                                                @for (var i = 0; i < makinas.Count; i++)
+                                                {
+                                                    <option value="@i">@makinas[i].Name</option>
+}
+                                            </select>}
                                     </div>
                                 </div>
                                 <div>
@@ -141,29 +146,21 @@
 
     @code {
 
-        // DateTime? selectedDate = DateTime.Now;
-
-        //void OnDateChanged(DateTime? date)
-        //{
-        //    dateTime2 = date;
-        //}
-
         Operator opt = new Operator();
 
         List<FaultApp2.Shared.Models.MakinaGrubu> makinaGrubus { get; set; }
-        FaultApp2.Shared.Models.MakinaGrubu SelectedMakinaGrubu { get; set; }
-        List<FaultApp2.Shared.Models.Makina> makinas { get; set; }
+        List<FaultApp2.Shared.Models.Makina> makinas { get; set; } = null;
+
 
 
         protected override async Task OnInitializedAsync()
         {
-            makinaGrubus = await client.GetFromJsonAsync<List<FaultApp2.Shared.Models.MakinaGrubu>>("api/makinagrubu");
-            makinas = await client.GetFromJsonAsync<List<FaultApp2.Shared.Models.Makina>>("api/Makina");
+           // makinas = await client.GetFromJsonAsync<List<FaultApp2.Shared.Models.Makina>>("api/m/Makina");
+            makinaGrubus = await client.GetFromJsonAsync<List<FaultApp2.Shared.Models.MakinaGrubu>>("api/MakinaGrubu");
         }
 
         public DateTime dateTime1 = DateTime.Now;
         public DateTime dateTime2 = DateTime.Now;
-        //public DateTime? dateTime3 = DateTime.Now;
 
 
         [Parameter] public FaultApp2.Shared.Models.Fault fault { get; set; } = new FaultApp2.Shared.Models.Fault();
@@ -171,31 +168,40 @@
         {
             fault.RecordTime = dateTime2;
             fault.CreatedTime = dateTime1;
-            //fault.CreatedTime = dateTime3.Value;
             await client.PostAsJsonAsync("api/fault", fault);
 
             uriHelper.NavigateTo("fault");
 
         }
 
-        Dictionary<String, List<String>> machineList { get; set; } =
-            new Dictionary<String, List<String>>()
-            {
-            { "EFEKT",  new List<string>() { "EFEKT-1", "EFEKT-2", "EFEKT-3", "EFEKT-4" } },
-             { "RAM",  new List<string>() { "RAM-1", "RAM-2", "RAM-3", "RAM-4" } }
-    };
 
-        public List<String> makina { get; set; } = new List<String>() { "Liste Yüklenemedi" };
-
-        public void DoStuff(ChangeEventArgs e)
+        async void MakinaGrubuSelected(ChangeEventArgs e)
         {
-            var kafamdakiMakina = e.Value.ToString();
-            fault.MakinaGrubu = new MakinaGrubu();
-            Console.WriteLine("It is definitely: " + kafamdakiMakina);
-            makina = machineList.ContainsKey(kafamdakiMakina) ? machineList[kafamdakiMakina] : new List<String>() { "Liste Yüklenemedi" };
-            Console.WriteLine("It is definitely: " + makina);
-
+            if (int.TryParse((string)e.Value, out var index) && index >= 0)
+            {
+                SelectMakinaGrubu(makinaGrubus[index]);
+                makinas = await client.GetFromJsonAsync<List<FaultApp2.Shared.Models.Makina>>("api/m/Makina/byGroup/" + makinaGrubus[index].Id);
+                StateHasChanged();
+            }
         }
+
+        void SelectMakinaGrubu(MakinaGrubu makinaGrb)
+        {
+            fault.MakinaGrubu = makinaGrb;
+        }
+        void MakinaSelected(ChangeEventArgs e)
+        {
+            if (int.TryParse((string)e.Value, out var index) && index >= 0)
+            {
+                SelectMakina(makinas[index]);
+            }
+        }
+
+        void SelectMakina(Makina makina)
+        {
+            fault.Makina = makina;
+        }
+
         public void CancelFault()
         {
 

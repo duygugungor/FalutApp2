@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FaultApp2.Server.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20200906180604_init")]
-    partial class init
+    [Migration("20200908215848_fly-away")]
+    partial class flyaway
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -154,7 +154,7 @@ namespace FaultApp2.Server.Migrations
 
                     b.HasIndex("MakinaGrubuId");
 
-                    b.ToTable("Makina");
+                    b.ToTable("MakinaSet");
                 });
 
             modelBuilder.Entity("FaultApp2.Shared.Models.MakinaGrubu", b =>
@@ -170,7 +170,7 @@ namespace FaultApp2.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MakinaGrubu");
+                    b.ToTable("MakinaGrubus");
                 });
 
             modelBuilder.Entity("FaultApp2.Shared.Models.Operator", b =>
