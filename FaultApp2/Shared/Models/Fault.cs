@@ -41,22 +41,12 @@ namespace FaultApp2.Shared.Models
         public MakinaGrubu MakinaGrubu { get; set; }
     }
    
-  //  [TypeConverter(typeof(MakinaGrubu))]
     public class MakinaGrubu
     {
         public MakinaGrubu()
         {
         }
-
-        //public MakinaGrubu(int ıd, string name)
-        //{
-        //    Id = ıd;
-        //    Name = name;
-        //    //Makina = new List<Makina>();
-        //}
-
         [Required()]
-
         public int Id { get; set; }
         [Required()]
         public string Name { get; set; }

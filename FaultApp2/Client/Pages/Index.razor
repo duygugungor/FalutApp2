@@ -1,10 +1,13 @@
 ﻿@page "/"
+@inject NavigationManager uriHelper
 
 <AuthorizeView>
     <Authorized>
-        <h1>Hello @context.User.Identity.Name !!</h1>
+        @*<h1>Hello @context.User.Identity.Name !!</h1>
 
-        <p>Welcome to Blazor Learner</p>
+            <p>Welcome to Blazor Learner</p>*@
+
+        uriHelper.NavigateTo("fault");
 
         <SurveyPrompt Title="How is Blazor working for you?" />
     </Authorized>

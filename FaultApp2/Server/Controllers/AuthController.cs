@@ -35,18 +35,24 @@ namespace FaultApp2.Server.Controllers
             var singInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (!singInResult.Succeeded) return BadRequest("Invalid password");
             await _signInManager.SignInAsync(user, request.RememberMe);
-            return Ok();
+             return Ok();
+            // return await Login(new LoginRequest
+            //{
+            //    UserName = request.UserName,
+            //    Password = request.Password
+
+            //});
         }
         [HttpPost]
         public async Task<IActionResult> Register(RegisterRequest parameters)
         {
             var user = new ApplicationUser();
-            var opt = new Operator();
+           // var opt = new Operator();
             user.UserName = parameters.UserName;
             var result = await _userManager.CreateAsync(user, parameters.Password);
             if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
-            opt.NameSurname = user.UserName;
-            _context.Add(opt);
+            //opt.NameSurname = user.UserName;
+           // _context.Add(opt);
             await _context.SaveChangesAsync();
             return await Login(new LoginRequest
             {

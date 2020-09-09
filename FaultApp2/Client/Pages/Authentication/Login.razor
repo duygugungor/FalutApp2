@@ -43,8 +43,8 @@
                 error = null;
                 try
                 {
-                    await authStateProvider.Login(loginRequest);
-            navigationManager.NavigateTo("/fault");
+                 await authStateProvider.Login(loginRequest);
+                 navigationManager.NavigateTo("fault");
                    
                 }
                 catch (Exception ex)
