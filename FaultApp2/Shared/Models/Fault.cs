@@ -12,11 +12,15 @@ namespace FaultApp2.Shared.Models
         public int Id { get; set; }
         [Required()]
         public MakinaGrubu MakinaGrubu { get; set; } = new MakinaGrubu();
+        [Required()]
         public Makina Makina { get; set; } = new Makina();
+        [Required()]
         public Operator Operator { get; set; } = new Operator();
         [Required()]
         public DateTime RecordTime { get; set; } = DateTime.Now;
+        [Required()]
         public string Description { get; set; }
+
         [Required()]
         public DateTime CreatedTime { get; set; } = DateTime.Now;
         public DateTime FixedTime { get; set; } = DateTime.Now;
@@ -25,7 +29,6 @@ namespace FaultApp2.Shared.Models
         public FaultStatus Status { get; set; } = FaultStatus.REPORTED;
 
     }
-   // [TypeConverter(typeof(Makina))]
     public class Makina
     {
         public Makina()

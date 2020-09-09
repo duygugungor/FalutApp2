@@ -8,201 +8,201 @@
 
 <h3>Arıza Sorgula</h3>
 <br />
+@*<AuthorizeView Roles="FaultEnded">
+    <Authorized>*@
+        <EditForm Model="@fault">
+            <DataAnnotationsValidator />
 
-<EditForm Model="@fault">
-    <DataAnnotationsValidator />
+            <div class="container">
+                <div class="row  justify-content-md-center">
+                    <div class="col">Başlangıç Tarihi</div>
+                    <div class="col">Bitiş Tarihi</div>
+                    <div class="col">Bölüm</div>
+                    <div class="col">Makina</div>
+                </div>
+                <div class="row  justify-content-md-center">
+                    <div class="col">
+                        <input class="form-control" id="dp1" type="date" @bind="dp1" />
+                    </div>
+                    <div class="col">
+                        <input class="form-control" id="dp2" type="date" @bind="dp2" />
+                    </div>
+                    @*<InputSelect @bind-Value="@faultStatus">
+                            <option value="">Lütfen Seçin</option>
+                            <option value="@FaultApp2.Shared.Models.FaultStatus.DEFAULT">Hepsi</option>
+                            <option value="@FaultApp2.Shared.Models.FaultStatus.REPORTED">Bekleyen</option>
+                            <option value="@FaultApp2.Shared.Models.FaultStatus.FIXED">Biten</option>
+                        </InputSelect>*@
 
-    <div class="container">
-        <div class="row  justify-content-md-center">
-            <div class="col">Başlangıç Tarihi</div>
-            <div class="col">Bitiş Tarihi</div>
-            <div class="col">Bölüm</div>
-            <div class="col">Makina</div>
-        </div>
-        <div class="row  justify-content-md-center">
-            <div class="col">
-                <input class="form-control" id="dp1" type="date" @bind="dp1" />
+                    <div class="col">
+                        <select class="browser-default custom-select" value="@fault.MakinaGrubu" @onchange="@DoStuff">
+                            <option value="">Lütfen Seçiniz</option>
+                            @foreach (var item in machineList.Keys)
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                        <ValidationMessage For="@(() => fault.MakinaGrubu)" />
+                    </div>
+                    <div class="col">
+                        <select class="browser-default custom-select" value="@fault.Makina">
+                            <option value="">Lütfen Seçiniz</option>
+                            @foreach (var item in makina)
+                            {
+
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                        <ValidationMessage For="@(() => fault.Makina)" />
+                    </div>
+                </div>
             </div>
-            <div class="col">
-                <input class="form-control" id="dp2" type="date" @bind="dp2" />
-            </div>
-            @*<InputSelect @bind-Value="@faultStatus">
-                    <option value="">Lütfen Seçin</option>
-                    <option value="@FaultApp2.Shared.Models.FaultStatus.DEFAULT">Hepsi</option>
-                    <option value="@FaultApp2.Shared.Models.FaultStatus.REPORTED">Bekleyen</option>
-                    <option value="@FaultApp2.Shared.Models.FaultStatus.FIXED">Biten</option>
-                </InputSelect>*@
+            <br />
+            <Radzen.Blazor.RadzenButton Click="@((args) => Click(args, "Button with text"))" Text="Sorgula" Style="margin-bottom: 20px; width: 150px" />
+            <br />
 
-            <div class="col">
-                <select class="browser-default custom-select" value="@fault.MakinaGrubu" @onchange="@DoStuff">
-                    <option value="">Lütfen Seçiniz</option>
-                    @foreach (var item in machineList.Keys)
-                    {
-                        <option value="@item">@item</option>
-                    }
-                </select>
-                <ValidationMessage For="@(() => fault.MakinaGrubu)" />
-            </div>
-            <div class="col">
-                <select class="browser-default custom-select" value="@fault.Makina">
-                    <option value="">Lütfen Seçiniz</option>
-                    @foreach (var item in makina)
-                    {
+        </EditForm>
 
-                        <option value="@item">@item</option>
-                    }
-                </select>
-                <ValidationMessage For="@(() => fault.Makina)" />
-            </div>
-        </div>
-    </div>
-    <br />
-    <Radzen.Blazor.RadzenButton Click="@((args) => Click(args, "Button with text"))" Text="Sorgula" Style="margin-bottom: 20px; width: 150px" />
-    <br />
+        <br />
 
-</EditForm>
-
-
-
-
-<br />
-
-@if (faultList == null)
-{
-    <text>Yükleniyor...</text>
-}
-else if (faultList.Length == 0)
-{
-    <text>Kayıt bulunamadı.</text>
-}
-else
-{
-    <Table Hoverable="true" Narrow="true">
-        <TableHeader ThemeContrast="ThemeContrast.Light">
-            <TableRow>
-                <TableHeaderCell>Bölüm</TableHeaderCell>
-                <TableHeaderCell>Makina</TableHeaderCell>
-                <TableHeaderCell>Bildirim Tarihi</TableHeaderCell>
-                <TableHeaderCell>Başlama Tarihi</TableHeaderCell>
-                <TableHeaderCell>Açıklama</TableHeaderCell>
-                <TableHeaderCell>Bitiş Tarihi</TableHeaderCell>
-                <TableHeaderCell>Yapılan İşlemler</TableHeaderCell>
-                @* <TableHeaderCell>Durum</TableHeaderCell>*@
-                <TableHeaderCell></TableHeaderCell>
-            </TableRow>
-        </TableHeader>
-        <TableBody>
-            @foreach (FaultApp2.Shared.Models.Fault faul in faultList)
-            {
-                if (faul.Status == FaultApp2.Shared.Models.FaultStatus.FIXED)
-                {
-                    <TableRow>
-                        <TableRowCell>@faul.MakinaGrubu</TableRowCell>
-                        <TableRowCell>@faul.Makina</TableRowCell>
-                        <TableRowCell>@faul.RecordTime</TableRowCell>
-                        <TableRowCell>@faul.CreatedTime</TableRowCell>
-                        <TableRowCell>@faul.Description</TableRowCell>
-                        <TableRowCell>@faul.FixedTime</TableRowCell>
-                        @*<TableRowCell>@(@faul.Status == FaultApp2.Shared.Models.FaultStatus.FIXED ? @faul.FixedTime.ToString() : "-")</TableRowCell>*@
-                        <TableRowCell>@faul.FixDescription</TableRowCell>
-                        @*<TableRowCell>@statusLabel(@faul.Status.ToString())</TableRowCell>*@
-                        @*<td>
-                                <a class="btn btn-success" href="/FaultListForm/@faul.Id">Edit</a>
-                                <button class="btn btn-danger" @onclick="@(() => Delete(faul.Id))">Delete</button>
-                            </td>*@
-                    </TableRow>
-                }
-            }
-
-        </TableBody>
-    </Table>
-}
-
-@code {
-
-    [Parameter] public FaultApp2.Shared.Models.FaultStatus faultStatus { get; set; }
-    [Parameter] public FaultApp2.Shared.Models.Fault fault { get; set; } = new FaultApp2.Shared.Models.Fault();
-
-    FaultApp2.Shared.Models.Fault[] faultList { get; set; }
-
-    public String statusLabel(String text)
-    {
-        if (text == "REPORTED")
+        @if (faultList == null)
         {
-            return "RAPOR EDİLDİ";
+            <text>Yükleniyor...</text>
         }
-
-        else if (text == "FIXED")
+        else if (faultList.Length == 0)
         {
-            return "TAMİR EDİLDİ";
+            <text>Kayıt bulunamadı.</text>
         }
         else
         {
-            return " - ";
+            <Table Hoverable="true" Narrow="true">
+                <TableHeader ThemeContrast="ThemeContrast.Light">
+                    <TableRow>
+                        <TableHeaderCell>Bölüm</TableHeaderCell>
+                        <TableHeaderCell>Makina</TableHeaderCell>
+                        <TableHeaderCell>Bildirim Tarihi</TableHeaderCell>
+                        <TableHeaderCell>Başlama Tarihi</TableHeaderCell>
+                        <TableHeaderCell>Açıklama</TableHeaderCell>
+                        <TableHeaderCell>Bitiş Tarihi</TableHeaderCell>
+                        <TableHeaderCell>Yapılan İşlemler</TableHeaderCell>
+                        @* <TableHeaderCell>Durum</TableHeaderCell>*@
+                        <TableHeaderCell></TableHeaderCell>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    @foreach (FaultApp2.Shared.Models.Fault faul in faultList)
+                    {
+                        if (faul.Status == FaultApp2.Shared.Models.FaultStatus.FIXED)
+                        {
+                            <TableRow>
+                                <TableRowCell>@faul.MakinaGrubu</TableRowCell>
+                                <TableRowCell>@faul.Makina</TableRowCell>
+                                <TableRowCell>@faul.RecordTime</TableRowCell>
+                                <TableRowCell>@faul.CreatedTime</TableRowCell>
+                                <TableRowCell>@faul.Description</TableRowCell>
+                                <TableRowCell>@faul.FixedTime</TableRowCell>
+                                @*<TableRowCell>@(@faul.Status == FaultApp2.Shared.Models.FaultStatus.FIXED ? @faul.FixedTime.ToString() : "-")</TableRowCell>*@
+                                <TableRowCell>@faul.FixDescription</TableRowCell>
+                                @*<TableRowCell>@statusLabel(@faul.Status.ToString())</TableRowCell>*@
+                                @*<td>
+                                        <a class="btn btn-success" href="/FaultListForm/@faul.Id">Edit</a>
+                                        <button class="btn btn-danger" @onclick="@(() => Delete(faul.Id))">Delete</button>
+                                    </td>*@
+                            </TableRow>
+                        }
+                    }
+
+                </TableBody>
+            </Table>
         }
-    }
+        @*</Authorized>
+    </AuthorizeView>*@
+
+        @code {
+
+            [Parameter] public FaultApp2.Shared.Models.FaultStatus faultStatus { get; set; }
+            [Parameter] public FaultApp2.Shared.Models.Fault fault { get; set; } = new FaultApp2.Shared.Models.Fault();
+
+            FaultApp2.Shared.Models.Fault[] faultList { get; set; }
+
+            public String statusLabel(String text)
+            {
+                if (text == "REPORTED")
+                {
+                    return "RAPOR EDİLDİ";
+                }
+
+                else if (text == "FIXED")
+                {
+                    return "TAMİR EDİLDİ";
+                }
+                else
+                {
+                    return " - ";
+                }
+            }
 
 
-    Dictionary<String, List<String>> machineList { get; set; } =
-new Dictionary<String, List<String>>()
-{
+            Dictionary<String, List<String>> machineList { get; set; } =
+        new Dictionary<String, List<String>>()
+        {
             { "EFEKT",  new List<string>() { "EFEKT-1", "EFEKT-2", "EFEKT-3", "EFEKT-4" } }
-      };
+          };
 
-    public List<String> makina { get; set; } = new List<String>() { "Liste Yüklenemedi" };
+            public List<String> makina { get; set; } = new List<String>() { "Liste Yüklenemedi" };
 
-    public void DoStuff(ChangeEventArgs e)
-    {
-        var kafamdakiMakina = e.Value.ToString();
-        fault.MakinaGrubu = new MakinaGrubu();
-        // Console.WriteLine("It is definitely: " + kafamdakiMakina);
-        makina = machineList.ContainsKey(kafamdakiMakina) ? machineList[kafamdakiMakina] : new List<String>() { "Liste Yüklenemedi" };
+            public void DoStuff(ChangeEventArgs e)
+            {
+                var kafamdakiMakina = e.Value.ToString();
+                fault.MakinaGrubu = new MakinaGrubu();
+                // Console.WriteLine("It is definitely: " + kafamdakiMakina);
+                makina = machineList.ContainsKey(kafamdakiMakina) ? machineList[kafamdakiMakina] : new List<String>() { "Liste Yüklenemedi" };
 
-    }
-    public DateTime dp1 = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Local);
-    public DateTime dp2 = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Local);
-
-
-    async void Click(MouseEventArgs args, string buttonName)
-    {
-        long after = ((DateTimeOffset)dp1).ToUnixTimeMilliseconds() + 10800000;
-        long before = ((DateTimeOffset)dp2).ToUnixTimeMilliseconds() + 97199000;
-
-        var url = "api/fault/query?afterTimestamp=" + after.ToString() + "&beforeTimestamp=" + before.ToString() /*+"&status=" +faultStatus.ToString()*/ ;
-        faultList = await client.GetFromJsonAsync<FaultApp2.Shared.Models.Fault[]>(url);
-        Console.WriteLine(faultList);
-    }
-
-    // var appointmentNoShow = from a in appointments
-    // from p in properties
-    // from c in clients
-    // where a.Id == p.OID &&
-    //(a.Start.Date >= startDate.Date && a.Start.Date <= endDate)
+            }
+            public DateTime dp1 = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Local);
+            public DateTime dp2 = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Local);
 
 
+            async void Click(MouseEventArgs args, string buttonName)
+            {
+                long after = ((DateTimeOffset)dp1).ToUnixTimeMilliseconds() + 10800000;
+                long before = ((DateTimeOffset)dp2).ToUnixTimeMilliseconds() + 97199000;
 
-    //public List<tbltask> gettaskssdata(int? c, int? userid, string a, string StartDate, string EndDate, int? ProjectID, int? statusid)
-    //{
-    //    List<tbltask> tbtask = new List<tbltask>();
-    //    DateTime sdate = (StartDate != "") ? Convert.ToDateTime(StartDate).Date : new DateTime();
-    //    DateTime edate = (EndDate != "") ? Convert.ToDateTime(EndDate).Date : new DateTime();
-    //    tbtask = entity.tbltasks.Include(x => x.tblproject).Include(x => x.tbUser).
-    //        Where(x => x.tblproject.company_id == c
-    //            && (ProjectID == 0 || ProjectID == x.tblproject.ProjectId)
-    //            && (statusid == 0 || statusid == x.tblstatu.StatusId)
-    //            && (a == "" || (x.TaskName.Contains(a) || x.tbUser.User_name.Contains(a)))
-    //            && ((StartDate == "" && EndDate == "") || ((x.StartDate >= sdate && x.EndDate <= edate)))).ToList();
+                var url = "api/fault/query?afterTimestamp=" + after.ToString() + "&beforeTimestamp=" + before.ToString() /*+"&status=" +faultStatus.ToString()*/ ;
+                faultList = await client.GetFromJsonAsync<FaultApp2.Shared.Models.Fault[]>(url);
+                Console.WriteLine(faultList);
+            }
+
+            // var appointmentNoShow = from a in appointments
+            // from p in properties
+            // from c in clients
+            // where a.Id == p.OID &&
+            //(a.Start.Date >= startDate.Date && a.Start.Date <= endDate)
 
 
 
-    //    return tbtask;
+            //public List<tbltask> gettaskssdata(int? c, int? userid, string a, string StartDate, string EndDate, int? ProjectID, int? statusid)
+            //{
+            //    List<tbltask> tbtask = new List<tbltask>();
+            //    DateTime sdate = (StartDate != "") ? Convert.ToDateTime(StartDate).Date : new DateTime();
+            //    DateTime edate = (EndDate != "") ? Convert.ToDateTime(EndDate).Date : new DateTime();
+            //    tbtask = entity.tbltasks.Include(x => x.tblproject).Include(x => x.tbUser).
+            //        Where(x => x.tblproject.company_id == c
+            //            && (ProjectID == 0 || ProjectID == x.tblproject.ProjectId)
+            //            && (statusid == 0 || statusid == x.tblstatu.StatusId)
+            //            && (a == "" || (x.TaskName.Contains(a) || x.tbUser.User_name.Contains(a)))
+            //            && ((StartDate == "" && EndDate == "") || ((x.StartDate >= sdate && x.EndDate <= edate)))).ToList();
 
 
-    //}
+
+            //    return tbtask;
 
 
+            //}
 
 
 
 
-}
+
+
+        }

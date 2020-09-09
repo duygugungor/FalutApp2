@@ -1,5 +1,7 @@
 ﻿@page "/"
 @inject NavigationManager uriHelper
+@using FaultApp2.Client
+
 
 <AuthorizeView>
     <Authorized>
@@ -7,7 +9,7 @@
 
             <p>Welcome to Blazor Learner</p>*@
 
-        uriHelper.NavigateTo("fault");
+
 
         <SurveyPrompt Title="How is Blazor working for you?" />
     </Authorized>
@@ -15,3 +17,10 @@
         <h1>Loading ...</h1>
     </Authorizing>
 </AuthorizeView>
+@code{
+        public void yonlendir(){ 
+
+
+    uriHelper.NavigateTo("fault");
+    } 
+}
