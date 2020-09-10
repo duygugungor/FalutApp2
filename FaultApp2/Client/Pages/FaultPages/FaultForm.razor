@@ -80,7 +80,7 @@
 
                                 </div>
                                 <div>
-                                    <textarea value="@fault.Description" class="form-control" rows="7" cols="33" />
+                                    <textarea @bind="@fault.Description" class="form-control" rows="7" cols="33" />
                                     <ValidationMessage For="@(() => fault.Description)" />
 
                                 </div>
@@ -94,13 +94,13 @@
 
                                     <label>Arıza Başlama Tarih/Saat</label>
                                 </div>
-
+                                <input type="datetime-local" @bind="@dateTime1" class="form-control">
                                 @*<input type="datetime-local" value="dateTime1" />*@
-                                <DateEdit Disabled="false" Date="@fault.CreatedTime" />
-                                <div class="md-form md-outline">
-                                    <input type="time" id="default-picker" class="form-control" value="dateTime1">
-                                    @*<label for="default-picker">Default Time Picker</label>*@
-                                </div>
+                                @*<DateEdit Disabled="false" Date="@fault.CreatedTime" @bind-Date="" />
+        <div class="md-form md-outline">
+            <input type="time" id="default-picker" class="form-control" @bind="@dateTime1">*@
+                                @*<label for="default-picker">Default Time Picker</label>*@
+                                @*</div>*@
                                 @*<TimeEdit TValue="DateTime?" Disabled="false"  Time="@dateTime3" />*@
                             </div>
                             <div>
@@ -140,7 +140,7 @@
         </EditForm>
     @*</Authorized>
     <Authorizing>*@
-        <h1>Loading ...</h1>
+       
     @*</Authorizing>
 </AuthorizeView>*@
 

@@ -35,6 +35,13 @@ namespace FaultApp2.Shared.Models
         {
         }
 
+        public Makina(int id, string name, MakinaGrubu makinaGrubu)
+        {
+            Id = id;
+            Name = name;
+            MakinaGrubu = makinaGrubu;
+        }
+
         [Required()]
 
         public int Id { get; set; }
@@ -49,6 +56,13 @@ namespace FaultApp2.Shared.Models
         public MakinaGrubu()
         {
         }
+
+        public MakinaGrubu(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
         [Required()]
         public int Id { get; set; }
         [Required()]

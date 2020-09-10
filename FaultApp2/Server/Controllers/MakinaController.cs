@@ -37,9 +37,14 @@ namespace FaultApp2.Server.Controllers
             return Ok(opt);
         }
         [HttpGet("byGroup/{makinaGrubuId}")]
-        public async Task<IActionResult> GetByMakinaGrubu(int makinaGrubuId)
+        public async Task<ActionResult<List<Makina>>> GetByMakinaGrubu(int makinaGrubuId)
         {
-            return Ok(await GetMakinas().Where(p => p.MakinaGrubu.Id == makinaGrubuId).ToListAsync());
+
+            var result = await _context.MakinaSet
+                .Where(p => p.MakinaGrubu.Id == makinaGrubuId)
+                .Include(a => a.MakinaGrubu).ToListAsync();
+
+            return result.Select(o => o).ToList();
         }
 
         private DbSet<Makina> GetMakinas()
